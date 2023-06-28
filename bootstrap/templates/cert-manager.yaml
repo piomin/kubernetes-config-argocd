@@ -26,8 +26,8 @@ spec:
           value: '500Mi'
         - name: cainjector.enabled
           value: 'false'
-        - name: startupapicheck.enabled
-          value: 'false'
+        - name: startupapicheck.limits.ephemeral-storage
+          value: '500Mi'
         - name: resources.limits.ephemeral-storage
           value: '500Mi'
 ---
