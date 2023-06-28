@@ -1,0 +1,41 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cert-manager
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  syncPolicy:
+    automated: {}
+    syncOptions:
+      - CreateNamespace=true
+  destination:
+    namespace: cert-manager
+    server: {{ .Values.server }}
+  project: {{ .Values.project }}
+  source:
+    repoURL: 'https://charts.jetstack.io'
+    targetRevision: v1.12.2
+    chart: cert-manager
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: certs-config
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  destination:
+    namespace: certs
+    server: {{ .Values.server }}
+  project: {{ .Values.project }}
+  source:
+    path: apps/cert-manager
+    repoURL: https://github.com/piomin/kubernetes-config-argocd.git
+    targetRevision: {{ .Values.project }}
+  syncPolicy:
+    automated: {}
+    syncOptions:
+      - CreateNamespace=true
