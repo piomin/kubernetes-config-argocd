@@ -24,6 +24,8 @@ spec:
           value: 'true'
         - name: injector.enabled
           value: 'false'
+        - name: resources.limits.ephemeral-storage
+          value: '500Mi'
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
