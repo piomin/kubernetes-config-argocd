@@ -22,7 +22,11 @@ spec:
       parameters:
         - name: installCRDs
           value: 'true'
-        - name: injector.enabled
+        - name: webhook.limits.ephemeral-storage
+          value: '500Mi'
+        - name: cainjector.enabled
+          value: 'false'
+        - name: startupapicheck.enabled
           value: 'false'
         - name: resources.limits.ephemeral-storage
           value: '500Mi'
