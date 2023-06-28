@@ -18,6 +18,12 @@ spec:
     repoURL: 'https://charts.jetstack.io'
     targetRevision: v1.12.2
     chart: cert-manager
+    helm:
+      parameters:
+        - name: installCRDs
+          value: 'true'
+        - name: injector.enabled
+          value: 'false'
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
