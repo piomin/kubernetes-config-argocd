@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample-kotlin-spring
+  labels:
+    app: sample-kotlin-spring
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sample-kotlin-spring
+  template:
+    metadata:
+      labels:
+        app: sample-kotlin-spring
+    spec:
+      containers:
+        - name: sample-kotlin-spring
+          image: quay.io/pminkows/sample-kotlin-spring:1.5.1.1
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 10
+            timeoutSeconds: 1
+            periodSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
+          resizePolicy:
+            - resourceName: "cpu"
+              restartPolicy: "NotRequired"
+          resources:
+            limits:
+              cpu: '2'
+              memory: "1Gi"
+            requests:
+              cpu: '0.1'
+              memory: "256Mi"
