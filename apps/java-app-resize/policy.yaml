@@ -24,6 +24,11 @@ spec:
             kind: Pod
             name: "{{pod_name}}"
             namespace: demo
+            preconditions:
+              all:
+                - key: "{{target.status.containerStatuses[0].ready}}"
+                  operator: Equals
+                  value: true
         patchStrategicMerge:
           spec:
             containers:
