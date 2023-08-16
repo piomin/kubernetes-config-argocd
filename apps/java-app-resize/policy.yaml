@@ -20,7 +20,7 @@ spec:
             default: ''
         - name: pod_status
           variable:
-            jmesPath: "request.status.containerStatuses[0].ready"
+            jmesPath: "request.object.status.containerStatuses[0].ready"
             default: false
       mutate:
         targets:
