@@ -18,6 +18,10 @@ spec:
           variable:
             jmesPath: "request.object.metadata.name"
             default: ''
+        - name: pod_status
+          variable:
+            jmesPath: "request.status.containerStatuses[0].ready"
+            default: false
       mutate:
         targets:
           - apiVersion: v1
@@ -26,7 +30,7 @@ spec:
             namespace: demo
             preconditions:
               all:
-                - key: "{{target.status.containerStatuses[0].ready}}"
+                - key: "{{pod_status}}"
                   operator: Equals
                   value: true
         patchStrategicMerge:
