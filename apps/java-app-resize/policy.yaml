@@ -30,7 +30,7 @@ spec:
             namespace: demo
             preconditions:
               all:
-                - key: "{{pod_status}}"
+                - key: "{{target.status.containerStatuses[0].ready}}"
                   operator: Equals
                   value: true
         patchStrategicMerge:
