@@ -1,0 +1,25 @@
+apiVersion: kyverno.io/v1
+kind: Policy
+metadata:
+  name: resize-pod-policy
+spec:
+  rules:
+    - name: resize-pod-policy
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+      preconditions:
+        all:
+          - key: "{{request.object.status.containerStatuses[0].ready}}"
+            operator: Equals
+            value: true
+      mutate:
+        patchStrategicMerge:
+          spec:
+            containers:
+              - (name): sample-kotlin-spring
+                resources:
+                  limits:
+                    cpu: 0.5
