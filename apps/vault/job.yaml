@@ -2,6 +2,8 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: vault-admin-initializer
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
 spec:
   template:
     spec:

@@ -4,6 +4,7 @@ metadata:
   name: bootstrap-config
   namespace: argocd
 spec:
+  goTemplate: true
   generators:
   - list:
       elements:
@@ -16,7 +17,7 @@ spec:
           repo: https://charts.bitnami.com/bitnami
           revision: 11.6.14
           namespace: default
-          postInstall: false
+          postInstall: true
         - chart: cert-manager
           repo: https://charts.jetstack.io
           revision: v1.14.4
@@ -26,34 +27,35 @@ spec:
           repo: https://redhat-cop.github.io/vault-config-operator
           revision: v0.8.25
           namespace: vault-config-operator
-          postInstall: true
+          postInstall: false
   template:
     metadata:
-      name: '{{chart}}'
+      name: '{{.chart}}'
+      annotations:
+        argocd.argoproj.io/sync-wave: "1"
     spec:
       syncPolicy:
         automated: {}
         syncOptions:
           - CreateNamespace=true
       destination:
-        namespace: '{{namespace}}'
+        namespace: '{{.namespace}}'
         server: https://kubernetes.default.svc
       project: default
+  templatePatch: |
+    spec:
       sources:
-        - repoURL: '{{repo}}'
-          chart: '{{chart}}'
-          targetRevision: '{{revision}}'
+        - repoURL: '{{ .repo }}'
+          chart: '{{ .chart }}'
+          targetRevision: '{{ .revision }}'
           helm:
             valueFiles:
-              - $values/bootstrap/values/{{chart}}/values.yaml
+              - $values/bootstrap/values/{{ .chart }}/values.yaml
         - repoURL: https://github.com/piomin/kubernetes-config-argocd.git
           targetRevision: HEAD
           ref: values
-  templatePatch: |
-    {{- if .postInstall }}
-    spec:
-      sources:
+        {{- if .postInstall }}
         - repoURL: https://github.com/piomin/kubernetes-config-argocd.git
           targetRevision: HEAD
           path: apps/{{ .chart }}
-    {{- end }}
+        {{- end }}

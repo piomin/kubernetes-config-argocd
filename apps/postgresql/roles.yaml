@@ -2,6 +2,9 @@ kind: KubernetesAuthEngineRole
 apiVersion: redhatcop.redhat.io/v1alpha1
 metadata:
   name: database-engine-creds-role
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   authentication:
     path: kubernetes

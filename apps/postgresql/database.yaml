@@ -2,25 +2,31 @@ kind: DatabaseSecretEngineConfig
 apiVersion: redhatcop.redhat.io/v1alpha1
 metadata:
   name: postgresql-database-config
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   allowedRoles:
     - postgresql-default-role
   authentication:
     path: kubernetes
     role: vault-admin
-  connectionURL: 'postgresql://{{username}}:{{password}}@postgres.default:5432?sslmode=disable'
+  connectionURL: 'postgresql://{{username}}:{{password}}@postgresql.default:5432?sslmode=disable'
   path: database/config/postgres
   pluginName: postgresql-database-plugin
   rootCredentials:
     passwordKey: postgresql-password
     secret:
-      name: postgresql-admin-password
+      name: postgresql
   username: postgres
 ---
 apiVersion: redhatcop.redhat.io/v1alpha1
 kind: DatabaseSecretEngineRole
 metadata:
   name: postgresql-default-role
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   creationStatements:
     - 'CREATE ROLE "{{name}}" WITH LOGIN PASSWORD ''{{password}}'' VALID UNTIL ''{{expiration}}''; GRANT SELECT ON ALL TABLES IN SCHEMA public TO "{{name}}"; GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO "{{name}}";'
