@@ -16,7 +16,7 @@ spec:
   project: {{ .Values.project }}
   sources:
     - repoURL: https://redhat-cop.github.io/vault-config-operator
-      chart: vault-config-operator/vault-config-operator
+      chart: vault-config-operator
       targetRevision: v0.8.25
       helm:
         valueFiles:

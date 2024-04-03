@@ -4,8 +4,8 @@ webhook:
   limits:
     ephemeral-storage: 500Mi
 
-cainjector:
-  enabled: false
+#cainjector:
+#  enabled: false
 
 startupapicheck:
   enabled: false
