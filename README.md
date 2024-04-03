@@ -11,7 +11,10 @@ Here's the current structure of the repo (will be modified soon):
     ├── Chart.yaml
     ├── templates
     │   ├── cert-manager.yaml
-    │   └── projects.yaml
+    │   ├── postgresql.yaml
+    │   ├── projects.yaml
+    │   ├── vault.yaml
+    │   └── vault-config-operator.yaml
     └── values.yaml
 ```
 

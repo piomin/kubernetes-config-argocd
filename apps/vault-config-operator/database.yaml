@@ -1,19 +1,33 @@
 kind: DatabaseSecretEngineConfig
 apiVersion: redhatcop.redhat.io/v1alpha1
 metadata:
-  name: my-postgresql-database
-  namespace: vault-config-operator
+  name: postgresql-database-config
 spec:
   allowedRoles:
-    - read-only
+    - postgresql-default-role
   authentication:
     path: kubernetes
-    role: database-engine-admin
-  connectionURL: 'postgresql://{{username}}:{{password}}@my-postgresql-database.test-vault-config-operator.svc:5432'
-  path: test-vault-config-operator/database
+    role: vault-admin
+  connectionURL: 'postgresql://{{username}}:{{password}}@postgres.default:5432?sslmode=disable'
+  path: database/config/postgres
   pluginName: postgresql-database-plugin
   rootCredentials:
     passwordKey: postgresql-password
     secret:
       name: postgresql-admin-password
   username: postgres
+---
+apiVersion: redhatcop.redhat.io/v1alpha1
+kind: DatabaseSecretEngineRole
+metadata:
+  name: postgresql-default-role
+spec:
+  creationStatements:
+    - 'CREATE ROLE "{{name}}" WITH LOGIN PASSWORD ''{{password}}'' VALID UNTIL ''{{expiration}}''; GRANT SELECT ON ALL TABLES IN SCHEMA public TO "{{name}}"; GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO "{{name}}";'
+  maxTTL: 10m
+  defaultTTL: 1m
+  authentication:
+    path: kubernetes
+    role: vault-admin
+  dBName: postgres
+  path: database/roles/postgresql-default-role

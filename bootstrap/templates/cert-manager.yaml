@@ -14,22 +14,16 @@ spec:
     namespace: cert-manager
     server: {{ .Values.server }}
   project: {{ .Values.project }}
-  source:
-    repoURL: 'https://charts.jetstack.io'
-    targetRevision: v1.12.2
-    chart: cert-manager
-    helm:
-      parameters:
-        - name: installCRDs
-          value: 'true'
-        - name: webhook.limits.ephemeral-storage
-          value: '500Mi'
-        - name: cainjector.enabled
-          value: 'false'
-        - name: startupapicheck.limits.ephemeral-storage
-          value: '500Mi'
-        - name: resources.limits.ephemeral-storage
-          value: '500Mi'
+  sources:
+    - repoURL: https://charts.jetstack.io
+      chart: cert-manager
+      targetRevision: v1.14.4
+      helm:
+        valueFiles:
+          - $values/bootstrap/values/cert-manager/values.yaml
+    - repoURL: https://github.com/piomin/kubernetes-config-argocd.git
+      targetRevision: HEAD
+      ref: values
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
