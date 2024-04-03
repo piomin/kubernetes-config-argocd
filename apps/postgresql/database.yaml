@@ -12,7 +12,7 @@ spec:
     path: kubernetes
     role: vault-admin
   connectionURL: 'postgresql://{{username}}:{{password}}@postgresql.default:5432?sslmode=disable'
-  path: database/config/postgres
+  path: default/database
   pluginName: postgresql-database-plugin
   rootCredentials:
     passwordKey: postgresql-password
@@ -36,4 +36,4 @@ spec:
     path: kubernetes
     role: vault-admin
   dBName: postgres
-  path: database/roles/postgresql-default-role
+  path: default/database
