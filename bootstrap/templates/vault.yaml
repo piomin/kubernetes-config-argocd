@@ -16,7 +16,7 @@ spec:
   project: {{ .Values.project }}
   sources:
     - repoURL: https://helm.releases.hashicorp.com
-      chart: hashicorp/vault
+      chart: vault
       targetRevision: 0.27.0
       helm:
         valueFiles:
