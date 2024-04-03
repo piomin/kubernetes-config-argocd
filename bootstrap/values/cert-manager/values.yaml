@@ -8,8 +8,9 @@ cainjector:
   enabled: false
 
 startupapicheck:
-  limits:
-    ephemeral-storage: 500Mi
+  enabled: false
+#  limits:
+#    ephemeral-storage: 500Mi
 
 resources:
   limits:
