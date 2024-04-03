@@ -11,18 +11,22 @@ spec:
           repo: https://helm.releases.hashicorp.com
           revision: 0.27.0
           namespace: vault
+          postInstall: true
         - chart: postgresql
           repo: https://charts.bitnami.com/bitnami
           revision: 11.6.14
           namespace: default
+          postInstall: false
         - chart: cert-manager
           repo: https://charts.jetstack.io
           revision: v1.14.4
           namespace: cert-manager
+          postInstall: false
         - chart: vault-config-operator
           repo: https://redhat-cop.github.io/vault-config-operator
           revision: v0.8.25
           namespace: vault-config-operator
+          postInstall: true
   template:
     metadata:
       name: '{{chart}}'
@@ -45,3 +49,11 @@ spec:
         - repoURL: https://github.com/piomin/kubernetes-config-argocd.git
           targetRevision: HEAD
           ref: values
+  templatePatch: |
+    {{- if .postInstall }}
+    spec:
+      sources:
+        - repoURL: https://github.com/piomin/kubernetes-config-argocd.git
+          targetRevision: HEAD
+          path: apps/{{ .chart }}
+    {{- end }}
