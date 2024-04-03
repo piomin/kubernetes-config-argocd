@@ -1,0 +1,17 @@
+kind: KubernetesAuthEngineRole
+apiVersion: redhatcop.redhat.io/v1alpha1
+metadata:
+  name: database-engine-admin
+  namespace: vault
+spec:
+  authentication:
+    path: kubernetes
+    role: policy-admin
+  path: kubernetes
+  policies:
+    - database-creds-view
+  targetServiceAccounts:
+    - default
+  targetNamespaces:
+    targetNamespaces:
+      - vault

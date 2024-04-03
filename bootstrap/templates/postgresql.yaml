@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: postgresql
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  syncPolicy:
+    automated: {}
+    syncOptions:
+      - CreateNamespace=true
+  destination:
+    namespace: default
+    server: {{ .Values.server }}
+  project: {{ .Values.project }}
+  source:
+    chart: postgresql
+    repoURL: https://charts.bitnami.com/bitnami
+    targetRevision: 15.2.0

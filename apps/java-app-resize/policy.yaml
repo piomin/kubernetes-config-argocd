@@ -12,7 +12,7 @@ spec:
         any:
           - resources:
               kinds:
-                - v1/Pod.status
+                - Pod
       context:
         - name: pod_name
           variable:

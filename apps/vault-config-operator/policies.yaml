@@ -1,0 +1,13 @@
+kind: Policy
+apiVersion: redhatcop.redhat.io/v1alpha1
+metadata:
+  name: database-creds-view
+  namespace: vault
+spec:
+  authentication:
+    path: kubernetes
+    role: vault-admin
+  policy: |
+    path "database/creds/default" {
+      capabilities = ["read"]
+    }

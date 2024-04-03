@@ -24,3 +24,33 @@ spec:
     - repoURL: https://github.com/piomin/kubernetes-config-argocd.git
       targetRevision: HEAD
       ref: values
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: vault-admin-initializer
+spec:
+  template:
+    spec:
+      containers:
+        - name: vault-admin-initializer
+          image: hashicorp/vault:1.15.2
+          env:
+            - name: VAULT_ADDR
+              value: http://vault.vault.svc:8200
+          command:
+            - /bin/sh
+            - -c
+            - |
+              export VAULT_TOKEN=root
+              sleep 10
+              vault auth enable kubernetes
+              vault secrets enable database
+              vault write auth/kubernetes/config kubernetes_host=https://kubernetes.default.svc:443 kubernetes_ca_cert=@/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+              vault write auth/kubernetes/role/vault-admin bound_service_account_names=default bound_service_account_namespaces=vault policies=vault-admin ttl=1h
+              vault policy write vault-admin - <<EOF
+                path "/*" {
+                  capabilities = ["create", "read", "update", "delete", "list","sudo"]
+                }          
+              EOF
+      restartPolicy: Never
