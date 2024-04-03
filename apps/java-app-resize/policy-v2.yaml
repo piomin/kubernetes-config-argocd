@@ -9,13 +9,18 @@ spec:
         any:
           - resources:
               kinds:
-                - Pod
+                - v1/Pod.status
       preconditions:
         all:
           - key: "{{request.object.status.containerStatuses[0].ready}}"
             operator: Equals
             value: true
       mutate:
+        targets:
+          - apiVersion: v1
+            kind: Pod
+            name: '{{request.object.metadata.name}}'
+            namespace: demo
         patchStrategicMerge:
           spec:
             containers:

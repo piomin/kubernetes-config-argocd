@@ -1,0 +1,32 @@
+#global:
+#  tlsDisable: false
+
+server:
+  dev:
+    enabled: true
+#  extraEnvironmentVars:
+#    VAULT_CACERT: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+  extraContainers:
+    - name: vault-admin-initializer
+      image: hashicorp/vault:1.15.2
+      env:
+        - name: VAULT_ADDR
+          value: http://vault.vault.svc:8200
+#        - name: VAULT_CACERT
+#          value: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+      command:
+        - /bin/sh
+        - -c
+        - |
+          export VAULT_TOKEN=root
+          vault auth enable kubernetes 
+          vault write auth/kubernetes/config kubernetes_host=https://kubernetes.default.svc:443 kubernetes_ca_cert=@/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+          vault write auth/kubernetes/role/vault-admin bound_service_account_names=default bound_service_account_namespaces=vault-admin policies=vault-admin ttl=1h
+          vault policy write vault-admin - <<EOF
+            path "/*" {
+              capabilities = ["create", "read", "update", "delete", "list","sudo"]
+            }          
+          EOF
+
+ui:
+  enabled: true
