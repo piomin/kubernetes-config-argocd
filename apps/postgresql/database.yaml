@@ -15,7 +15,7 @@ spec:
   path: database
   pluginName: postgresql-database-plugin
   rootCredentials:
-    passwordKey: postgresql-password
+    passwordKey: postgres-password
     secret:
       name: postgresql
   username: postgres
