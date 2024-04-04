@@ -1,0 +1,26 @@
+apiVersion: db.atlasgo.io/v1alpha1
+kind: AtlasSchema
+metadata:
+  name: sample-spring-cloud-vault
+spec:
+  credentials:
+    scheme: postgres
+    host: postgresql.default
+    user: postgres
+    passwordFrom:
+      secretKeyRef:
+        key: postgres-password
+        name: postgresql
+    database: postgres
+    port: 5432
+    parameters:
+      sslmode: disable
+  schema:
+    sql: |
+      create table person (
+        id serial primary key,
+        name varchar(255),
+        gender varchar(255),
+        age int,
+        external_id int
+      );
