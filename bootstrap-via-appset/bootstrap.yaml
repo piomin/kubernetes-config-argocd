@@ -9,28 +9,38 @@ spec:
   - list:
       elements:
         - chart: vault
+          name: vault
           repo: https://helm.releases.hashicorp.com
           revision: 0.27.0
           namespace: vault
           postInstall: true
         - chart: postgresql
+          name: postgresql
           repo: https://charts.bitnami.com/bitnami
           revision: 11.6.14
           namespace: default
           postInstall: true
         - chart: cert-manager
+          name: cert-manager
           repo: https://charts.jetstack.io
           revision: v1.14.4
           namespace: cert-manager
           postInstall: false
         - chart: vault-config-operator
+          name: vault-config-operator
           repo: https://redhat-cop.github.io/vault-config-operator
           revision: v0.8.25
           namespace: vault-config-operator
           postInstall: false
+        - chart: charts/atlas-operator
+          name: atlas
+          repo: ghcr.io/ariga
+          revision: 0.4.2
+          namespace: atlas
+          postInstall: false
   template:
     metadata:
-      name: '{{.chart}}'
+      name: '{{.name}}'
       annotations:
         argocd.argoproj.io/sync-wave: "1"
     spec:
@@ -50,12 +60,12 @@ spec:
           targetRevision: '{{ .revision }}'
           helm:
             valueFiles:
-              - $values/bootstrap/values/{{ .chart }}/values.yaml
+              - $values/bootstrap/values/{{ .name }}/values.yaml
         - repoURL: https://github.com/piomin/kubernetes-config-argocd.git
           targetRevision: HEAD
           ref: values
         {{- if .postInstall }}
         - repoURL: https://github.com/piomin/kubernetes-config-argocd.git
           targetRevision: HEAD
-          path: apps/{{ .chart }}
+          path: apps/{{ .name }}
         {{- end }}
