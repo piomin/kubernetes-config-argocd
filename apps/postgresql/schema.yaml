@@ -2,6 +2,9 @@ apiVersion: db.atlasgo.io/v1alpha1
 kind: AtlasSchema
 metadata:
   name: sample-spring-cloud-vault
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   credentials:
     scheme: postgres
