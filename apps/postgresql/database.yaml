@@ -29,11 +29,11 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   creationStatements:
-    - 'CREATE ROLE "{{name}}" WITH LOGIN PASSWORD ''{{password}}'' VALID UNTIL ''{{expiration}}''; GRANT SELECT ON ALL TABLES IN SCHEMA public TO "{{name}}"; GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO "{{name}}";'
+    - CREATE ROLE "{{name}}" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}'; GRANT SELECT ON ALL TABLES IN SCHEMA public TO "{{name}}"; GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO "{{name}}";
   maxTTL: 10m0s
   defaultTTL: 1m0s
   authentication:
     path: kubernetes
     role: vault-admin
-  dBName: postgres
+  dBName: postgresql-database-config
   path: database

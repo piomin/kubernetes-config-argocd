@@ -4,5 +4,3 @@ enableCertManager: true
 env:
   - name: VAULT_ADDR
     value: http://vault.vault:8200
-  - name: VAULT_CACERT
-    value: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt

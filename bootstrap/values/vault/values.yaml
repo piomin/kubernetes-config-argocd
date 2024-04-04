@@ -1,11 +1,6 @@
-#global:
-#  tlsDisable: false
-
 server:
   dev:
     enabled: true
-#  extraEnvironmentVars:
-#    VAULT_CACERT: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
 
 ui:
   enabled: true
