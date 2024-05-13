@@ -1,12 +1,12 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: sample-app-db
+  name: sample-app-db-vault
 data:
   application.yml: |
     spring:
       application:
-        name: sample-db-vault
+        name: sample-app-db-vault
       datasource:
         url: jdbc:postgresql://postgresql:5432/postgres
       cloud:

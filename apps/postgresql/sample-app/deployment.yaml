@@ -25,7 +25,7 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: sample-db-vault
+            name: sample-app-db-vault
       serviceAccountName: default
 ---
 apiVersion: v1
