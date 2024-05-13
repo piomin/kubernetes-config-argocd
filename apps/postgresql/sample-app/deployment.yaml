@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample-app-db-vault
+spec:
+  selector:
+    matchLabels:
+      app: sample-app-db-vault
+  template:
+    metadata:
+      labels:
+        app: sample-app-db-vault
+    spec:
+      containers:
+        - name: sample-app-db-vault
+          image: piomin/sample-app:1.0-gitops
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_CONFIG_LOCATION
+              value: /opt/config/application.yml
+          volumeMounts:
+            - mountPath: /opt/config
+              name: config
+      volumes:
+        - name: config
+          configMap:
+            name: sample-db-vault
+      serviceAccountName: default
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sample-app-db-vault
+spec:
+  type: ClusterIP
+  selector:
+    app: sample-app-db-vault
+  ports:
+    - port: 8080

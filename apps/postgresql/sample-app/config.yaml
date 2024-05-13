@@ -1,0 +1,26 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: sample-app-db
+data:
+  application.yml: |
+    spring:
+      application:
+        name: sample-db-vault
+      datasource:
+        url: jdbc:postgresql://postgresql:5432/postgres
+      cloud:
+        vault:
+          config.lifecycle:
+            enabled: true
+            min-renewal: 10s
+            expiry-threshold: 30s
+          kv.enabled: false
+          uri: http://vault.vault:8200
+          authentication: KUBERNETES
+          postgresql:
+            enabled: true
+            role: postgresql-default-role
+            backend: database
+          kubernetes:
+            role: database-engine-creds-role
